@@ -10,5 +10,6 @@ dependencies:
   - scipy
   - psutil
   - gdal
+  - geopandas
 prefix: /opt/anaconda3/envs/ccb_env
 
