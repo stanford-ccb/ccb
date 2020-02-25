@@ -256,7 +256,8 @@ class maxent:
         # set how replicates are handled
         replicate_types = ['crossvalidate', 'bootstrap', 'subsample']
         replicate_types_default = 'crossvalidate'
-        if self.parameters_['replicate_type'].lower() not in replicate_types:
+        replicate_type = self.parameters_['replicate_type'].lower()
+        if replicate_type not in replicate_types:
             prnt.error("incorrect replicate type specified: {}".format(replicate_type))
             prnt.error("  must be one of: {}".format(', '.join(replicate_types)))
             prnt.error("  using default: {}".format(replicate_types_default))
@@ -414,13 +415,13 @@ class maxent:
             return None
             
         # reconcile the stupid differences in column names for prediction type
-        if prediction_type is 'raw':
+        if prediction_type == 'raw':
             sample_column = 'Raw prediction'
             backgr_column = 'raw'
-        elif prediction_type is 'cumulative':
+        elif prediction_type == 'cumulative':
             sample_column = 'Cumulative prediction'
             backgr_column = 'cumulative'
-        elif prediction_type is 'logistic':
+        elif prediction_type == 'logistic':
             sample_column = 'Logistic prediction'
             backgr_column = 'Logistic'
         else:
@@ -545,7 +546,7 @@ class maxent:
         if self.parameters_['test_samples'] is not None:
             s.append('-T')
             s.append(self.parameters_['test_samples'])
-        elif self.parameters_['pct_test_points'] is not 0:
+        elif self.parameters_['pct_test_points'] != 0:
             s.append('-X')
             s.append('{:d}'.format(self.parameters_['pct_test_points']))
             
