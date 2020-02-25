@@ -1,0 +1,14 @@
+name: ccb_env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - pandas
+  - numpy
+  - scikit-learn
+  - matplotlib
+  - scipy
+  - psutil
+  - gdal
+prefix: /opt/anaconda3/envs/ccb_env
+
