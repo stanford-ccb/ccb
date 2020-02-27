@@ -24,3 +24,22 @@ echo 'export PATH=$CCB/bin:$PATH' >> ~/.bashrc
 ```
 
 You can add then access the binary commands though the singularity container by typing e.g. `ccb gbif-to-vector -h`. You could also access the python module through e.g. `ccb ipython` then `import ccb`.
+
+
+### Installation without singularity container
+
+```buildoutcfg
+
+# from the ccb directory
+
+# create a conda environment
+conda env create -f environment.yml
+
+# download the maxent binary -- may need to `brew install wget`
+wget https://biodiversityinformatics.amnh.org/open_source/maxent/maxent.php?op=download -O maxent.zip
+unzip maxent.zip
+rm maxent.bat maxent.zip
+
+# install java
+brew install java
+```

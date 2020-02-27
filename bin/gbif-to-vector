@@ -25,6 +25,7 @@ continents = world['continent'].unique().tolist()
 # set the default taxa as a list to parse for the arguments
 taxa = ['kingdom', 'phylum', 'class', 'order', 'family', 'genus', 'species']
 
+# TODO (DOBN): add a link in the description to explain what GBIF data is
 # create the argument parser to feed input options
 parser = argparse.ArgumentParser(description='Cleans and reprojects GBIF data')
 
@@ -46,7 +47,7 @@ parser.add_argument('--continent', help='subset the data by continent',
 parser.add_argument('--country', help='subset the data by country', default=None,
                     choices=countries, nargs='+', metavar='')
 
-# finall, parse the arguments
+# finally, parse the arguments
 args = parser.parse_args()
 
 
@@ -90,7 +91,7 @@ observation_type = ['HUMAN_OBSERVATION',
                    'LIVING_SPECIMEN', 
                    'MATERIAL_SAMPLE', 
                    'MACHINE_OBSERVATION']
-                   
+
 valid_by = [args.taxonomic_level, 'decimalLatitude','decimalLongitude']
 duplicate_by = ['species', 'genus', 'decimalLatitude','decimalLongitude']
 
@@ -106,7 +107,8 @@ print("[ STATUS ]: Reading input file: {}".format(args.input))
 # read the data into memory and subset to just the relevant columns
 full = pd.read_csv(args.input, header=0, sep='\t', usecols=col_names, dtype=col_types, error_bad_lines=False)
 
-# then convert the numberic data types from strings
+# TODO (DOBN): not best practice to coerce way through errors - change this!
+# then convert the numeric data types from strings
 full['decimalLatitude'] = pd.to_numeric(full['decimalLatitude'], errors='coerce')
 full['decimalLongitude'] = pd.to_numeric(full['decimalLongitude'], errors='coerce')
 full['year'] = pd.to_numeric(full['year'], errors='coerce')
@@ -116,14 +118,14 @@ full['coordinateUncertaintyInMeters'] = pd.to_numeric(full['coordinateUncertaint
 print("[ STATUS ]: Removing bad data points")
 
 # keep only valid records
-full = full.dropna(subset=valid_by) 
+full = full.dropna(subset=valid_by)
 
-# drop records that are too inpercise
+# drop records that are too imprecise
 if args.precision is not None:
     full = full.loc[full['coordinateUncertaintyInMeters'] <= args.precision]
 
 # drop points with 0.0 lat/lon
-full = full.loc[full['decimalLatitude']  != 0.0]
+full = full.loc[full['decimalLatitude'] != 0.0]
 full = full.loc[full['decimalLongitude'] != 0.0]
 
 # drop it like its old
@@ -134,7 +136,7 @@ full = full[full['basisOfRecord'].isin(observation_type)]
 
 # finally, remove duplicate points and clear the index
 full = full[np.invert(full.duplicated(subset=duplicate_by))]
-full.reset_index(drop = True, inplace = True)
+full.reset_index(drop=True, inplace=True)
 
 # now, we'll convert it to a geopandas dataframe
 geometry = [Point(xy) for xy in zip(full.decimalLongitude, full.decimalLatitude)] 
