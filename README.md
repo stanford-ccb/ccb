@@ -28,18 +28,41 @@ You can add then access the binary commands though the singularity container by 
 
 ### Installation without singularity container
 
-```buildoutcfg
+(1) Install java sdk from 
+https://www.oracle.com/java/technologies/javase-downloads.html
 
-# from the ccb directory
 
-# create a conda environment
-conda env create -f environment.yml
+Next steps have to be done from the ccb directory (the directory where this readme is located):
 
-# download the maxent binary -- may need to `brew install wget`
-wget https://biodiversityinformatics.amnh.org/open_source/maxent/maxent.php?op=download -O maxent.zip
-unzip maxent.zip
-rm maxent.bat maxent.zip
-
-# install java
-brew install java
+(2) Create a conda environment
+```buildoutcfg 
+$ conda env create -f environment.yml
 ```
+
+(3) Download the maxent binary
+
+May need on mac:
+`$ brew install wget`
+
+```buildoutcfg
+$ wget https://biodiversityinformatics.amnh.org/open_source/maxent/maxent.php?op=download -O maxent.zip
+
+$ unzip maxent.zip
+
+$ rm maxent.bat maxent.zip
+```
+
+(4) Install this package in the conda env
+```buildoutcfg 
+$ conda activate ccb_env
+
+$ pip install -e .
+```
+
+At this point you should be ready to run tests:
+```python
+$ pytest tests/
+```
+
+
+
