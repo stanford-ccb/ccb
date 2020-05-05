@@ -1,0 +1,17 @@
+name: pytest continuous integration testing
+
+on:
+  push:
+    branches: [ master, develop ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: docker://earthchris/ccb-pytest
+    - name: Runs pytest utilities inside a pre-built docker container
+      run: |
+        conda run --name ccb \
+        "pytest --cov --cov-fail-under=80 --cov-report=xml:test_results/results.xml --cov-report=term-missing:skip-covered"
